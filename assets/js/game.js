@@ -58,24 +58,43 @@ var enemyInfo = [
     }
 ];
 
-// You can also log multiple values at once like this
-console.log(playerInfo.name, playerInfo.attack, playerInfo.health);
 
-console.log(enemy.names);
-console.log(enemyInfo.length);
+var fightOrSkip = function () {
+    // ask player if they'd like to fight or skip using fightOrSkip function
+    var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
 
-for (var i = 0; i < enemyInfo.length; i++) {
-    console.log(enemy.names[i]);
-    console.log(i);
-    console.log(enemy.names[i] + " is at " + i + " index");
+    promptFight = promptFight.toLowerCase();
+
+
+    // Conditional Recursive Function Call
+    if (promptFight === "" || promptFight === null) {
+        window.alert("You need to provide a valid answer! Please try again.");
+        return fightOrSkip();
+    }
+    // if player picks "skip" confirm and then stop the loop
+    if (promptFight === "skip") {
+        // confirm player wants to skip
+        var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+
+        // if yes (true), leave fight
+        if (confirmSkip) {
+            window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+            // subtract money from playerMoney for skipping
+            playerInfo.playerMoney = playerInfo.money - 10;
+
+            // return true if player wants to leave
+            return true;
+
+        }
+    }
 }
-
 var fight = function (enemy) {
     while (playerInfo.health > 0 && enemy.health > 0) {
-        // ask player if they'd like to fight or run
-        var promptFight = window.prompt(
-            'Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.'
-        );
+        // ask player if they'd like to fight or skip using fightOrSkip function
+        if (fightOrSkip()) {
+            // if true, leave fight by breaking loop
+            break;
+        }
 
         // if player picks "skip" confirm and then stop the loop
         if (promptFight === "skip" || promptFight === "SKIP") {
